@@ -14,8 +14,7 @@ contract Assignment4 {
     bytes32 crucial1Hash = crucial1(_first, _second, _third);
     
     bytes32 numHash = keccak256(abi.encodePacked(_num));
-    uint value_ = uint(_value);
-    bytes32 valueHash = keccak256(abi.encodePacked(value_));
+    bytes32 valueHash = keccak256(abi.encodePacked(uint(_value)));
     finalHash = keccak256(abi.encodePacked(numHash, valueHash, crucial1Hash));
   }
 }
