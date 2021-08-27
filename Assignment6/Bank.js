@@ -28,21 +28,21 @@ class Bank {
   }
 
   changeBankName(_caller, _newName) {
-    if (this.isAdmin(_caller)) {
+    if (this.isAdmin(_caller) || this.isApprovedToChangeState(_caller)) {
       this.bankName = _newName;
-    } else console.error("Action not permitted. Admin only");
+    } else console.error("Action not permitted. Unauthorized caller");
   }
 
   changeBankAddress(_caller, _newAdmin) {
-    if (this.isAdmin(_caller)) {
+    if (this.isAdmin(_caller) || this.isApprovedToChangeState(_caller)) {
       this.bankAdmin = _newAdmin;
-    } else console.error("Action not permitted. Admin only");
+    } else console.error("Action not permitted. Unauthorized caller");
   }
 
   changeBankAdmin(_caller, _newAdmin) {
-    if (this.isAdmin(_caller)) {
+    if (this.isAdmin(_caller) || this.isApprovedToChangeState(_caller)) {
       this.admin = _newAdmin;
-    } else console.error("Action not permitted. Admin only");
+    } else console.error("Action not permitted. Unauthorized caller");
   }
   
   // function for checking that the function caller is the admin
@@ -78,28 +78,30 @@ class Bank {
     this.customers.push(customer);
   }
 
-  // TODO
   approve(_approver, _viewer) {
-    if (_viewer === '') {
-      console.error("Viewer address cannot be empty")
+    if (_approver === '' || _viewer === '') {
+      console.error("Empty addresses are not allowed")
     }
     if (this.approvals.has(_approver)) {
       let previousApprov = this.approvals.get(_approver);
-      console.log("previous", previousApprov)
       let updatedApprov = [...previousApprov, _viewer]
-      console.log("updated", updatedApprov)
       this.approvals.set(_approver, updatedApprov)
     } else {
       this.approvals.set(_approver, [_viewer]);
     }
   }
 
-  // TODO
   disapprove(_approver, _viewer) {
-    if (_viewer === '') {
-      console.error("Viewer address cannot be empty")
+    if (_approver === '' || _viewer === '') {
+      console.error("Empty addresses are not allowed")
     }
-    this.approvals.set(_approver,)
+    if (this.approvals.has(_approver)) {
+      let approvals = this.approvals.get(_approver);
+      let updatedApprov = approvals.filter(x => x !== _viewer);
+      this.approvals.set(_approver, updatedApprov)
+    } else {
+      console.error("Approver does not exist");
+    }
   }
 
   getCustomerIdentifier(_customerAddr) {
@@ -134,7 +136,10 @@ function runSimulation() {
   bank.approve(approver, viewer1);
   bank.approve(approver, viewer2);
   console.log(bank.approvals);
+  bank.disapprove(approver, viewer1);
+  console.log(bank.approvals);
   console.log("approved", bank.isApprovedToView(approver, viewer2));
+  console.log("approved", bank.isApprovedToView(approver, viewer1));
 }
 
 runSimulation();
