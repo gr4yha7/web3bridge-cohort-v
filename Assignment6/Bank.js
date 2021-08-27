@@ -74,7 +74,7 @@ class Bank {
       registeredAt: Date.now(),
       address: _address
     }
-    this.customersMap.set(address, customer);
+    this.customersMap.set(_address, customer);
     this.customers.push(customer);
   }
 
@@ -128,18 +128,25 @@ function runSimulation() {
   const name = 'Bankless Bank';
   const address = '4th Dimension, Wormhole';
   let bank = new Bank(admin, name, address);
+  let customerAddr = '0xdddddddddd'
+  bank.register(customerAddr, 'Justin Sun', 'male', 21);
+  // console.log(bank.customersMap);
+  // console.log(bank.customers);
+  // console.log(bank.getBankCustomers);
+  console.log(bank.viewCustomerDetails(admin, customerAddr));
+  console.log("CID", bank.getCustomerIdentifier(customerAddr));
 
-  let approver = '0xaaaaaaaaaa';
-  let viewer1 = '0xbbbbbbbbbb';
-  let viewer2 = '0xcccccccccc';
+  // let approver = '0xaaaaaaaaaa';
+  // let viewer1 = '0xbbbbbbbbbb';
+  // let viewer2 = '0xcccccccccc';
   
-  bank.approve(approver, viewer1);
-  bank.approve(approver, viewer2);
-  console.log(bank.approvals);
-  bank.disapprove(approver, viewer1);
-  console.log(bank.approvals);
-  console.log("approved", bank.isApprovedToView(approver, viewer2));
-  console.log("approved", bank.isApprovedToView(approver, viewer1));
+  // bank.approve(approver, viewer1);
+  // bank.approve(approver, viewer2);
+  // console.log(bank.approvals);
+  // bank.disapprove(approver, viewer1);
+  // console.log(bank.approvals);
+  // console.log("approved", bank.isApprovedToView(approver, viewer2));
+  // console.log("approved", bank.isApprovedToView(approver, viewer1));
 }
 
 runSimulation();
