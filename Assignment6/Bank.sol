@@ -24,8 +24,8 @@ contract Bank {
   }
   
   modifier canUpdateState {
-      require(msg.sender == admin || msg.sender == allowedCaller, "Unauthorized to change state");
-      _;
+    require(msg.sender == admin || msg.sender == allowedCaller, "Unauthorized to change state");
+    _;
   }
 
   modifier isApproved(address _customerToView) {
